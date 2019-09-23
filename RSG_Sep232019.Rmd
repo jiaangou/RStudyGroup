@@ -1,0 +1,187 @@
+---
+title: "R Study Group -  Getting Started with R"
+author: "William Ou"
+date: "9/24/2019"
+output: html_document
+---
+
+## Why use R?
+1. Clean and fast way of doing repetitive things 
+2. Reproducible (anyone with your script can do exactly what you did)
+3. Easy calculations
+4. Data wrangling: cleaning and organizing data
+5. Data visualization 
+6. Tons of libraries for you to use  - libraries are essentially functions that people have written already that you can use
+7. A friendly community where everyone helps everyone!
+
+Any thing else?
+
+
+##What is R Studio?
+
+- an open-source Integrated Development Environment (IDE) for R
+- helps you keep track of things 
+<div style="margin-bottom:10px;">
+</div>
+1. Code Editor - Basically your note pad or sketch pad for code
+2. R Console - This is what R itself actually is -- where your executed code goes to and where the output of those executed code shows, too
+3. Workspace & History- Keeps track of all the variables you have assigned, data you have loaded, and code that you executed
+4. Plots and files - The graphical device of your plots and shows where your files are (not too useful IMO)
+<div style="margin-bottom:10px;">
+</div>
+<center>
+####R Studio interface
+<div style="margin-bottom:5px;">
+</div>
+![R Studio Interface](http://www.sthda.com/sthda/RDoc/images/rstudio.png)
+</center>
+
+
+##R syntax and defintions
+
+### 1. Operators
+
+#### 1a. Arithmetic: +, -, /, *
+
+```{r}
+1+1
+1-5
+1+5/2 #Order of operations still holds!
+2*4-2
+```
+<div style="margin-bottom:50px;">
+</div>
+
+#### 1b. Logical or Boolean: >,<,<=,>=,==, !=
+```{r}
+1>3 #greater than
+1>=0.1 #greater than or equal to
+1<=4 #less than or equal to
+112==2 #equal to
+15!=2 #not equal to
+```
+
+
+### 2. Class (or the "type" of object)
+- This is usually the cause of all problems! 
+- Most functions can only accept a certain "class" of object as input. When it is not, you will get an error message
+- Whenever you get an error message, check if your objects are the right class!
+
+#### 2a. Numeric  - outputs of arithmetic expressions are numeric
+```{r}
+class(5+1)
+```
+
+#### 2b. Logical - output of logical/boolean expressions
+- These are essentially binary outputs (ie. TRUE = 1 and FALSE = 0)
+- In R, you can apply arithmetic operators to  TRUE and FALSE 
+```{r}
+class(5>2)
+(5>2)+(1==1)
+class((5>2)+(1==1)) #this one is an integer, which generally works the same as numeric. The main difference has something to do with how the memory is stored in the machine...  TLDR not important but watch out 
+```
+
+#### 2c. Character or "string"
+- non-numerical "values" like words (but numerical values can be stored as charcaters too!)
+- these values are specified with quotation marks "" or '' 
+- letters or words without "" marks are read by R as variables 
+```{r,error=T}
+sentence <- "Hello, mortals."
+print(sentence)
+class(sentence)
+print('sentence') #by adding '', the letters in senetence is a charcater object and not the variable that I have previously assigned
+class('5193') 
+class(5193)
+'5123'+3 #common mistake/error !!
+```
+
+
+
+#### 2d. Vectors 
+- A series of n-elements in which all elements are of the same class
+- Key here is that everything is of the same class! 
+- Becuase all elements are of the same class, the class() function returns the class of the objects and not a "vector" class (ie. there is no "vector" class)
+- to create a vector, you can use c()
+```{r}
+c(1,2,5,2) # vector of integers/numerical values
+class(c(1,2,5,2))
+
+class(c(2,2,4,'bb')) #numerical values are forced as characters
+
+length(c(1,2,4,5,14)) #length() is a function that tells you the number of elements of your object
+```
+
+
+#### BONUS!! A cool thing about vectors: It makes things faster!
+- You might hear people say that a solution or algorithm is "vectorized", and this is what they are talking about. 
+
+Say we have a numeric vector, *italic*vec*italic*:
+```{r}
+vec <- c(1,2,4,2,5)
+vec
+```
+Imagine we want to add 5 to all of the elements of *italic*vec*italic*. One way to do it is to iterate through each the vector and add 1 to each iteration, like so:
+```{r}
+# for loop
+system.time(for (i in 1:length(vec)){
+  vec[i] <- vec[i]+1
+  })
+
+vec
+```
+*bold*OR*bold* Option 2, we could just simply +1 to the whole vector
+```{r}
+system.time(vec <- vec+1)
+vec
+```
+
+Option 2 is so fast that the decimals were not enough to show the time! Although Option 1 was pretty fast too (0.002s), these kind of computations will become extremely long to compute when you have a LARGE data set (eg. 10000+). Moreover, Option 2 is also just a more elegant piece of code!
+
+
+
+#### 2d. Data frames
+- This is probably what you will work with the most, so get familiar with it!
+- The best way to describe a data frame is that it is a list of vectors, in which each column is a vector and the rows are the elements of the vector
+- Following this description, elements within a column of a dataframe should always be of the same class while elements between columns do not necessarily have to!
+- This brings up another important point: Data should *bold*ALWAYS*bold* be organized in the long format! Ie. Each column should represent a single variable and rows shoul
+
+
+*bold*What's wrong with this?*bold*
+
+```{r,echo=F, fig.align="center", out.width = "400px"}
+knitr::include_graphics("https://www.dropbox.com/s/6r7nr14ms28olco/BadData.png?dl=1")
+```
+
+
+### PLOTS
+<center>
+```{r,echo=F, fig.align="center", out.width = "400px"}
+knitr::include_graphics("/Users/jiaangou/Desktop/dot.gif")
+```
+</center>
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+
