@@ -1,0 +1,84 @@
+---
+title: "Data manipulation assignment"
+author: "William Ou"
+date: "5/31/2020"
+output: pdf_document
+---
+
+## Data set
+
+- load appropriate libraries 
+```{r,eval=FALSE}
+library(dplyr)
+library(tidyr)
+library(stringr)
+```
+
+- install the package "nycflights13" and load it
+
+```{r,eval=FALSE}
+install.packages("nycflights63")
+library(nycflights63)
+```
+
+```{r,echo=FALSE,include=FALSE}
+library(nycflights13)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(stringr)
+```
+
+- once loaded, you will be able to directly call a dataframe object called *flights* 
+```{r}
+head(flights)
+```
+
+- inspect the data set as you would. You can also read the help file for more details (ie. ?flights)
+
+## Use data manipultation functions (or other methods you like) to answer the following questions:
+
+### Question 1. 
+a) Which NYC airport has the most flights? 
+b) Which NYC airport flies to the most destinations? 
+c) BONUS: What are the top 3 destinations of each airport
+
+- There are 3 NYC airports : EWR, LGA, JFK
+```{r}
+unique(flights$origin)
+```
+
+- Suggested functions to use: __group_by()__, __summarise()__, __n()__, __distinct()__
+- You can always check out the help files of those functions to see how they work (or check the cheatsheet!)
+- the function __arrange()__ may also be helpful when you want to order your values
+- For the bonus section, you may consider using the __pivot_wider()__ function so that each airport contains its own column (and then you can call arrange() on each column to get the top 3)
+
+### Question 2. For simplicity, let's assume that delay means that there are delays in both arrival and departure (ie. arr_delay>0 & dep_delay>0). 
+a) Which airport has the "MOST" (ie. frequency) delays? 
+b) Does the ranking of a) change after dividing by the number of flight for each airport (1a)? 
+c) On average, which carrier has the "LONGEST" (ie. duration) delays (add arrival and departure delays together)?
+
+- you can use the __filter()__ function to get observations where arr_delay and dep_delay are both >0  
+- example:
+```{r,eval=FALSE}
+flights%>%
+filter(arr_delay>0&dep_delay>0)
+```
+
+
+
+### Question 3: Using the overall mean, convert travel distances into 2 distance categories (ie. longer or shorter than average).Do departure or arrival delay times differ betweeen distance categories? 
+
+- like in Q2, filter out non-delays observations
+
+```{r,echo=FALSE,fig.height=2}
+flights <- flights %>%
+  filter(arr_delay>0&dep_delay>0)%>%
+  mutate(dist_class = ifelse(distance>mean(distance),'long','short'))
+
+ggplot(flights,aes(distance,fill=dist_class))+
+  geom_histogram(binwidth=80)+theme_classic()+labs(fill = "Distance category")
+
+```
+
+

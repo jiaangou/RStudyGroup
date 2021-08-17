@@ -1,0 +1,70 @@
+---
+title: "Plotting exercises"
+author: "William Ou"
+date: "6/14/2020"
+output: pdf_document
+---
+```{r, include=FALSE,echo=FALSE}
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+
+#transform 
+iris_long <- pivot_longer(iris,cols=1:4,names_to='Trait',values_to = 'Measurement (mm)')
+
+
+facet_p <- ggplot(iris_long,aes(x=Species,y=`Measurement (mm)`,col=Trait))+geom_point()+
+  facet_wrap(~Trait)+theme_classic()
+
+dodge_p <- ggplot(iris_long,aes(x=Species,y=`Measurement (mm)`,col=Trait))+
+  geom_point(position=position_dodge(width=0.5))+theme_classic()
+
+```
+
+#Intro
+One of the main purposes of statistics is to make quantitative comparisons between certain groups of data. For this reason, data visualization should reflect the comparison of interest. 
+
+#Example with iris data
+The iris data set contains information on 4 floral traits of 3 Iris species (flowers): __Iris setosa__, __versicolor__, and __virginca__. These floral traits are: Sepal length, Sepal width, Petal length, Petal width, all of which are measured in __mm__. 
+Although the iris data set is a relatively simple, there are still multiple ways in which one could make comparisons between groups of the data. 
+
+```{r }
+head(iris)
+```
+
+
+#Objective
+The goal of this exercise is to think about the comparisons you can make and plot figures that reflect that comparison. This will also require some manipulation of data via tidyverse function (ie. pivotting).
+
+##Question 1: Can you list a number of specific comparisons that you could make?
+
+
+##Question 2: Try and replicate the figure below. HINT: You will need to do some pivotting. Once you have done so, you can create facets using the function __facet_wrap()__
+
+```{r, echo=FALSE}
+facet_p
+```
+
+An alternative to this figure is that, instead of using facets, you can dodge the points like so: 
+```{r,eval=FALSE}
+geom_point(position=position_dodge(width=0.5))
+```
+
+
+```{r, echo=FALSE,fig.align="center", out.width = "300px"}
+ggplot(iris_long,aes(x=Species,y=`Measurement (mm)`,col=Trait))+
+  geom_point(position=position_dodge(width=0.5))+theme_classic()
+```
+
+##Q3: Try switching up some of the variables. Let's see how it looks if we use colors to identify species and trait as the x-axis. See if you can write your own code for this. Do you notice anything different?
+
+```{r, echo=FALSE,fig.align="center", out.width = "300px"}
+ggplot(iris_long,aes(x=Trait,y=`Measurement (mm)`,col=Species))+
+  geom_point(position=position_dodge(width=0.5))+theme_classic()
+```
+
+##Q4 Are there parameters that you could change to the figures above that can highlight a particular pattern?
+
+
+
+

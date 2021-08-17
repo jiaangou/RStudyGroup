@@ -1,15 +1,9 @@
 ---
-title: "R Study Group -  Getting Started with R"
+title: "Getting Started with R"
 author: "William Ou"
-date: "9/24/2019"
-output:
-  pdf_document: default
-  html_document:
-    keep_md: yes
+date: "5/23/2020"
+output: pdf_document
 ---
-```{r, include=FALSE}
-options(tinytex.verbose = TRUE)
-```
 
 
 ## Why use R?
@@ -151,7 +145,7 @@ as.integer(v)
 ## Data structures
 
 ```{r,echo=F, fig.align='center', out.width="300px"}
-knitr::include_graphics('/Users/jiaangou/Desktop/RDataStructures.png')
+knitr::include_graphics('RDataStructures.png')
 ```
 
 
@@ -228,15 +222,18 @@ df[,1] #same as df$x but using indices instead of the variable name
 __What's wrong with this?__ 
 
 ```{r,echo=F, fig.align="center", out.width = "300px"}
-#knitr::include_graphics("/Users/jiaangou/Desktop/BadData.png")
+#knitr::include_graphics("BadData.png")
 ```
 
 ```{r, include=FALSE}
-baddata <- as.data.frame(matrix(c(rpois(5,30),rpois(5,80),rpois(5,25),rpois(5,23),rpois(5,10)),byrow=T,nrow=5))
+area = round(rnorm(5,300,60),2)
+popsize = rpois(5,1000)
+gdp = rnorm(5,40)
+baddata <- as.data.frame(matrix(c(area,popsize,gdp),byrow = T,ncol=5))
 
-baddata <- cbind('site'=c('Glasgow','Guanacaste','Cape Town','Okinawa','Pasoh'),baddata)
-names(baddata)[2:6] <- c('site','species richness','total individuals','beetle abundance','beetle richness',
-'butterfly abundance','butterfly richness')
+baddata <- cbind('site'=c('population size (10^6)','area (km^2)','GDP (10^3)'),baddata)
+
+names(baddata)[2:6] <- c('Glasgow','Guanacaste','Cape Town','Okinawa','Pasoh')
 ```
 
 ```{r}
@@ -244,15 +241,42 @@ baddata
 ```
 
 
-
 #### 3. Matrices
-- *To be continued*
+- Are essentially multidimensional vectors 
+- Just like vectors, they can only contain values of one  __*class*__ at a time
+
+- m x n * n x p = m x p matrix
+
+```{r}
+set.seed(12)
+mn <- matrix(rnorm(n=12,mean=4),nrow=4) #4*3 matrix
+np <- matrix(rnorm(n=9,mean=10,sd=3),nrow=3) #3*3 matrix
+```
+```{r}
+mn
+np
+mn%*%np #matrix multiplication
+```
+
 
 #### 4. Lists
-- *To be continued*
+- Lists are useful for storing __*groups*__ of similar objects together
+- These objects *CAN* be of different classes *(LIKE VERY DIFFERENT)*
+- Can become very useful when you want to apply different functions to different sections of your data
 
+```{r}
+vec <- c('how','now','brown','cow')
+protime <- system.time(1+1)
+mat <- matrix(rnorm(10),nrow=5)
+df <- data.frame(color=c('red','blue','gree'),integers=c(2,5,1))
 
-### Excercise: Create a new vector from an existing one that has its elements shifted to the right (1st becomes 2nd and last becomes the first)
+demolist <- list(vec,protime,mat,df)
+demolist
+```
+\newpage
+##Exercises
+
+### Excercise 1: Create a new vector from an existing one that has its elements shifted to the right (1st becomes 2nd and last becomes the first)
 
 - if the original vector is c(5,3,1,2), return the vector c(2,5,3,1)
 - There are multiple ways to do it but the BEST answer is one that is generalized and works for any vector 
@@ -260,21 +284,37 @@ baddata
 
 
 
+### Excercise 2: Use logical operators to check how many values in this numeric vector is __*below*__ the value 10
+
+```{r}
+set.seed(123)
+num_vec <- rnorm(5000,30,10)
+```
+
+- the answer should be 117
+
+```{r,include=FALSE}
+sum(num_vec<10)
+```
+
+### Excercise 3: Multiply the values of vec that are >9 and <12 by 1000
+
+```{r,include=FALSE}
+answer <- num_vec[num_vec>9&num_vec<12]*1000
+```
+
+```{r}
+answer
+```
 
 
-
+\newpage
 ### Loading data
 - There are numerous ways to load data, usually it depends on the format (.csv, .txt, .xlsx etc.) of data you are loading
 - As much as possible, don't use excel because of formatting issues
 - tab delimited files are the most stable
-- you can directly load data by its name if your working directory is in the same as where the file is
+- you can directly load data by its name if you are working directory is in the same as where the file is
 - or you can load it by providing the path of the file
-```{r}
-getwd() # get working directory
-setwd("/Users/jiaangou/Desktop/R study group/RStudyGroup") #sets working directory
-```
-
-
 ```{r,eval=FALSE}
 dat <- read.csv('zooplankton_clean.csv')
 
@@ -309,7 +349,3 @@ zooplankton <- read.csv("https://www.dropbox.com/s/500av3zullmiti7/zooplankton.c
 - Inspect the data set first. Some helpful functions to help you do so: View(), head(), str()
 - Make some easy plots: hist(), boxplot(y~x)
 - If you inspect the genus variable more closely you might find some errors
-
-
-
-
